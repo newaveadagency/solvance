@@ -4843,7 +4843,8 @@ function parseIcal(icalText,villaName){
       if(typeof data==='string') data=JSON.parse(data);
       data._savedAt=ts;
       localStorage.setItem('solvance_v3',JSON.stringify(data));
-      fetch(SU+'/rest/v1/solvance_data',{method:'POST',headers:hd(),body:JSON.stringify({client_id:cid(),data:data,updated_at:ts})})
+      var _body=JSON.stringify({client_id:cid(),data:data,updated_at:ts});
+      fetch(SU+'/rest/v1/solvance_data?on_conflict=client_id',{method:'POST',headers:hd(),body:_body})
       .then(function(r){
         if(r.ok){if(typeof toast==='function')toast('☁ Spremljeno');}
         else{r.text().then(function(t){console.warn('Cloud save',r.status,t);if(typeof toast==='function')toast('⚠ Greška '+r.status);});}
